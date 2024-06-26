@@ -1,0 +1,4 @@
+volumes
+data
+certs
+.env
