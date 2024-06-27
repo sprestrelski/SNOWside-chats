@@ -5,6 +5,16 @@
 
 ### Postgres 
 [Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)
+@peterchwl Notes:
+- I used brew and simply did brew install postgresql —> this gives you postgresql@14
+- For some reason it didn't make the postgresql user so I used rootuser and it was fine
+```bash
+sudo -u peter.lee psql
+\c postgres # this changes the channel
+```
+- Then keep following tutorial, don’t need to do step 8
+- KEEP PASSWORDS THE SAME “mmuser-password” --> this way you won't have to touch any configs in .env
+- Hopefully these steps won't be relevant once Sam gets the shared Postgres running
 
 ### Docker
 1. Install Docker Desktop and keep it open.
@@ -33,3 +43,14 @@ sudo docker compose -f docker-compose.yml -f docker-compose.without-nginx.yml do
 
 ## Mattermost setup
 To connect to the Mattermost instance from another device on the network, on the device running the instance, run `ifconfig` and look for an IPV4 address. It should be in the form XXX.XXX.X.XX or similar. Then, go to `XXX.XXX.X.XX:8065` on the secondary device.
+
+## MATTERMOSTDRIVER
+1. The mattermostdriver needs to be installed on a venv
+2. I named my venv “env” and it’s in the root directory of the repo: python3 -m venv env
+3. Then: source env/bin/activate
+4. Then, if encountering “No module named pip3”, you need to rollback your pip3 version: python -m ensurepip --default-pip
+5. Then you’re able to run: pip3 install mattermostdriver
+
+## IF RUNNING INTO AUTHENTICATION ERRORS:
+- curl -i -d '{"login_id":"pcl004@ucsd.edu","password":"abcABC123!"}' http://localhost:8065/api/v4/users/login
+- Replace the login id and password with ur own
