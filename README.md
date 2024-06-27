@@ -7,6 +7,10 @@
 [Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)
 @peterchwl Notes:
 - I used brew and simply did brew install postgresql —> this gives you postgresql@14
+- Then run createdb:
+```bash
+createdb
+```
 - For some reason it didn't make the postgresql user so I used rootuser and it was fine
 ```bash
 sudo -u peter.lee psql
