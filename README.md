@@ -5,6 +5,7 @@
 
 ### Postgres 
 [Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)  
+
 @peterchwl Notes:
 - I used brew and simply did brew install postgresql —> this gives you postgresql@14
 - Then run createdb:
@@ -63,7 +64,7 @@ To connect to the Mattermost instance from another device on the network, on the
 5. Then you’re able to run: pip3 install mattermostdriver
 
 ## IF RUNNING INTO AUTHENTICATION ERRORS:
-- curl -i -d '{"login_id":"pcl004@ucsd.edu","password":"abcABC123!"}' http://localhost:8065/api/v4/users/login
+- curl -i -d '{"login_id":"(your email here)","password":"(your password here)"}' http://localhost:8065/api/v4/users/login
 - Replace the login id and password with ur own
 
 ## Python setup
