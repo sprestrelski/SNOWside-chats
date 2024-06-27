@@ -4,7 +4,7 @@
 [Tutorial](https://docs.mattermost.com/install/install-docker.html) 
 
 ### Postgres 
-[Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)
+[Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)  
 @peterchwl Notes:
 - I used brew and simply did brew install postgresql —> this gives you postgresql@14
 - Then run createdb:
@@ -22,13 +22,18 @@ sudo -u peter.lee psql
 
 ### Docker
 1. Install Docker Desktop and keep it open.
-2. Create a `.env` file and change the `DOMAIN` to `localhost`. 
-On Mac: ([source](https://stackoverflow.com/questions/76299173/getting-error-error-getting-credentials-err-exit-status-1-out-when-tr))
-> In `~/.docker/config.json`, change `"credsStore" : "desktop"` with `"credsStore": osxkeychain"`
+2. Create a `.env` file and change the `DOMAIN` to `localhost`. Also, change `MATTERMOST_IMAGE=mattermost-enterprise-edition` to `MATTERMOST_IMAGE=mattermost-team-edition` since the teams edition is free.
 ```bash
 cd docker
 cp env.example .env
 ```
+
+On Mac: ([source](https://stackoverflow.com/questions/76299173/getting-error-error-getting-credentials-err-exit-status-1-out-when-tr))
+> In `~/.docker/config.json`, change `"credsStore" : "desktop"` with `"credsStore": osxkeychain"`
+
+This fixes the error
+> error getting credentials - err: exit status 1, out: ``
+
 
 3. Change permissions so Docker can access files
 ```bash
@@ -45,6 +50,8 @@ to shut down
 sudo docker compose -f docker-compose.yml -f docker-compose.without-nginx.yml down
 ```
 
+This will run the Mattermost instance on port 8065 and the postgres database on port 5432.
+
 ## Mattermost setup
 To connect to the Mattermost instance from another device on the network, on the device running the instance, run `ifconfig` and look for an IPV4 address. It should be in the form XXX.XXX.X.XX or similar. Then, go to `XXX.XXX.X.XX:8065` on the secondary device.
 
@@ -58,3 +65,9 @@ To connect to the Mattermost instance from another device on the network, on the
 ## IF RUNNING INTO AUTHENTICATION ERRORS:
 - curl -i -d '{"login_id":"pcl004@ucsd.edu","password":"abcABC123!"}' http://localhost:8065/api/v4/users/login
 - Replace the login id and password with ur own
+
+## Python setup
+Make a `config.py` with the following
+```
+bot_token = <sample bot token string>
+```
