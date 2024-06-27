@@ -1,9 +1,10 @@
 from mattermostdriver import Driver
+import config
 
 driver = Driver({
     'url': 'localhost',
     # 'team': 'general',
-    'token': 'x1uiwxu3hingxbt6pdpr7bxmzr', #the bot's token
+    'token': config.bot_token, #the bot's token
     'scheme': 'http', #localhost uses http
     'basepath': '/api/v4',
     'verify': False,
