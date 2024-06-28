@@ -1,25 +1,47 @@
 # SNOWside Chats ❄️
+Want to know your colleagues better? Not sure how to reach out?
 
-## Local Mattermost Docker Setup
-[Tutorial](https://docs.mattermost.com/install/install-docker.html) 
+Try SNOWside chats! Our premiere software uses ✨generative AI✨ to match you to people with similar interests and set up 1:1s! 
 
-### Postgres 
-[Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)  
+![logo](images/snowside-logo.png)
 
-@peterchwl Notes:
-- I used brew and simply did brew install postgresql —> this gives you postgresql@14
-- Then run createdb:
+## How does it work?
+SNOWside Chats is a Mattermost bot that matches people within ServiceNow based on your interests. All you need to do is enter a blurb about yourself, and SNOWside's matching algorithm will set up one-on-one's with you and your ServiceNow soulmate!
+1. DM the bot with a bio
+> Sam: Hi, I'm Sam and I'm an intern on the IntegrationHub team! I'm into crafts and long walks on the beach.  
+> Shruti: Hi I'm Shruti! I study computer engineering and love knitting and rollerblading. I'm on the ML QE Team!
+2. Set up the 1:1 matching in a channel 
+3. Snowside will make channels for each of the matches!
+> Hey Sam and Shruti! I'm Snowside, nice to meet you both! It sounds like you both enjoy some great hobbies outside of work/school - Sam, I'm sure your beach walks are amazing, and Shruti, knitting and rollerblading are such cool skills! Why don't you two chat about your favorite crafting projects or outdoor adventures? See where the conversation takes you!
+
+Stack
+- Local instance: Mattermost and Postgres
+- Bot: Python and MongoDB
+
+All software was created and tested on MacOS, which means things may break on other distributions.
+
+## Mattermost Setup
+[Main Tutorial](https://docs.mattermost.com/install/install-docker.html) || [Database Tutorial]([Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html))
+
+We'll set up the Postgres database and Docker instance first, then the bot itself.
+
+### Postgres  
+Install postgresql 
+```bash
+brew install postgresql # this installs postgresql@14
+```
+Then run createdb:
 ```bash
 createdb
 ```
-- For some reason it didn't make the postgresql user so I used rootuser and it was fine
+
+If this doesn't make the postgresql user, use rootuser
 ```bash
 sudo -u peter.lee psql
 \c postgres # this changes the channel
 ```
-- Then keep following tutorial, don’t need to do step 8
-- KEEP PASSWORDS THE SAME “mmuser-password” --> this way you won't have to touch any configs in .env
-- Hopefully these steps won't be relevant once Sam gets the shared Postgres running
+Then, follow the rest of the database setup tutorial.
+
 
 ### Docker
 1. Install Docker Desktop and keep it open.
@@ -53,22 +75,32 @@ sudo docker compose -f docker-compose.yml -f docker-compose.without-nginx.yml do
 
 This will run the Mattermost instance on port 8065 and the postgres database on port 5432.
 
-## Mattermost setup
+### Connecting from other devices
 To connect to the Mattermost instance from another device on the network, on the device running the instance, run `ifconfig` and look for an IPV4 address. It should be in the form XXX.XXX.X.XX or similar. Then, go to `XXX.XXX.X.XX:8065` on the secondary device.
 
-## MATTERMOSTDRIVER
-1. The mattermostdriver needs to be installed on a venv
-2. I named my venv “env” and it’s in the root directory of the repo: python3 -m venv env
-3. Then: source env/bin/activate
-4. Then, if encountering “No module named pip3”, you need to rollback your pip3 version: python -m ensurepip --default-pip
-5. Then you’re able to run: pip3 install mattermostdriver
 
-## IF RUNNING INTO AUTHENTICATION ERRORS:
-- curl -i -d '{"login_id":"(your email here)","password":"(your password here)"}' http://localhost:8065/api/v4/users/login
-- Replace the login id and password with ur own
+## Bot Setup
 
-## Python setup
-Make a `config.py` with the following
+1. Create a virtual environment and activate it
+```bash
+python3 -m venv env
+source env/bin/activate
+```
+2. Install dependencies
+```bash
+pip3 install mattermostdriver langchain ollama pandas numpy
+```
+3. Make a `config.py` with the following
 ```
 bot_token = <sample bot token string>
+mongo_uri = <sample mongo uri>
 ```
+4. Run `python3 connect.py` to start the bot!
+
+### Debugging
+If encountering “No module named pip3”
+- You need to rollback your pip3 version: `python -m ensurepip --default-pip`
+
+If running into authentication issues,
+- curl -i -d '{"login_id":"(your email here)","password":"(your password here)"}' http://localhost:8065/api/v4/users/login
+- Replace the login id and password with your own

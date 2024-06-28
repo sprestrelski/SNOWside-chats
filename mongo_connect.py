@@ -1,10 +1,11 @@
+import config
 import pymongo
 from pymongo import MongoClient
 
 def insert(data):
     try:
         # connecting
-        uri = "mongodb+srv://JoshuaShruti:servicenow@clustersn0.aquderp.mongodb.net/"
+        uri = config.mongo_uri
         client = MongoClient(uri, server_api=pymongo.server_api.ServerApi(
             version="1", strict=True, deprecation_errors=True))
         client.admin.command("ping")
