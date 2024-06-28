@@ -21,7 +21,7 @@ Stack
 All software was created and tested on MacOS, which means things may break on other distributions.
 
 ## Mattermost Setup
-[Main Tutorial](https://docs.mattermost.com/install/install-docker.html) || [Database Tutorial]([Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html))
+[Main Tutorial](https://docs.mattermost.com/install/install-docker.html) || [Database Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)
 
 We'll set up the Postgres database and Docker instance first, then the bot itself.
 
