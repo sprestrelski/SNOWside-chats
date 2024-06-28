@@ -2,14 +2,27 @@
 
 ## Local Mattermost Docker Setup
 
+<<<<<<< HEAD
 [Tutorial](https://docs.mattermost.com/install/install-docker.html)
 
 ### Postgres
 
+# [Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)
+
+### Postgres
+
 [Tutorial](https://docs.mattermost.com/install/prepare-mattermost-database.html)
-@peterchwl Notes:
+
+> > > > > > > 3722aa5d626f6d1549d76ab0d6ec91485afb7607
+> > > > > > > @peterchwl Notes:
 
 - I used brew and simply did brew install postgresql —> this gives you postgresql@14
+- Then run createdb:
+
+```bash
+createdb
+```
+
 - For some reason it didn't make the postgresql user so I used rootuser and it was fine
 
 ```bash
@@ -24,14 +37,27 @@ sudo -u peter.lee psql
 ### Docker
 
 1. Install Docker Desktop and keep it open.
+   <<<<<<< HEAD
 2. Create a `.env` file and change the `DOMAIN` to `localhost`.
    On Mac: ([source](https://stackoverflow.com/questions/76299173/getting-error-error-getting-credentials-err-exit-status-1-out-when-tr))
    > In `~/.docker/config.json`, change `"credsStore" : "desktop"` with `"credsStore": osxkeychain"`
+
+======= 2. Create a `.env` file and change the `DOMAIN` to `localhost`. Also, change `MATTERMOST_IMAGE=mattermost-enterprise-edition` to `MATTERMOST_IMAGE=mattermost-team-edition` since the teams edition is free.
+
+> > > > > > > 3722aa5d626f6d1549d76ab0d6ec91485afb7607
 
 ```bash
 cd docker
 cp env.example .env
 ```
+
+On Mac: ([source](https://stackoverflow.com/questions/76299173/getting-error-error-getting-credentials-err-exit-status-1-out-when-tr))
+
+> In `~/.docker/config.json`, change `"credsStore" : "desktop"` with `"credsStore": osxkeychain"`
+
+This fixes the error
+
+> error getting credentials - err: exit status 1, out: ``
 
 3. Change permissions so Docker can access files
 
@@ -53,6 +79,8 @@ to shut down
 sudo docker compose -f docker-compose.yml -f docker-compose.without-nginx.yml down
 ```
 
+This will run the Mattermost instance on port 8065 and the postgres database on port 5432.
+
 ## Mattermost setup
 
 To connect to the Mattermost instance from another device on the network, on the device running the instance, run `ifconfig` and look for an IPV4 address. It should be in the form XXX.XXX.X.XX or similar. Then, go to `XXX.XXX.X.XX:8065` on the secondary device.
@@ -67,9 +95,13 @@ To connect to the Mattermost instance from another device on the network, on the
 
 ## IF RUNNING INTO AUTHENTICATION ERRORS:
 
-- curl -i -d '{"login_id":"pcl004@ucsd.edu","password":"abcABC123!"}' http://localhost:8065/api/v4/users/login
+- curl -i -d '{"login_id":"(your email here)","password":"(your password here)"}' http://localhost:8065/api/v4/users/login
 - Replace the login id and password with ur own
 
-## On the discord bot
+## Python setup
 
-Quick note on my thing, you need to install Ollama, download the llama 3 model and mxbai-embed-large model, and install langchain, ollama, pandas, numpy python packages
+Make a `config.py` with the following
+
+```
+bot_token = <sample bot token string>
+```
