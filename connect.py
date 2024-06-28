@@ -1,16 +1,16 @@
 import json
 from mattermostdriver import Driver
 import config
-
+import requests
 
 from mongo_connect import insert
 
 from llmutils import run
 
-
-
 # Map for responses
 responses = {}
+
+mattermost_url = "http://localhost:8065"
 
 driver = Driver({
     'url': 'localhost',
@@ -45,14 +45,42 @@ driver.init_websocket(my_event_handler)
 # MATCH PEOPLE HERE AND SEND MESSAGES
 # CALL LLM
 
-matches = run()
+matches, greetings = run()
+
+print(greetings)
+
+headers = {
+    "Authorization": f"Bearer {config.bot_token}",
+    "Content-Type": "application/json"
+}
+
+count = 0
 
 for match in matches:
     print(match)
     if " " not in match[0]:
-        print("hello")
-        driver.channels.create_group_message_channel(match)
+        count+=1
+        payload = {
+        "team_id": "do71aqeuxbnqmr5szcqphygugo",  # The team ID where the channel will be created
+        "name": "group_channel_name" + str(count),  # The name of the channel
+        "display_name": "Snowside Chat!",
+        "type": "P"  # "P" for private, "O" for public
+        }
+        create_channel_url = f"{mattermost_url}/api/v4/channels"
+        response = requests.post(create_channel_url, headers=headers, json=payload)
+        channel_data = response.json()
+        channel_id = channel_data.get("id")
+        add_user_url = f"{mattermost_url}/api/v4/channels/{channel_id}/members"
 
-#driver.channels.create_channel
+        for user_id in match:
+            add_user_payload = {
+                "user_id": user_id
+            }
+            response = requests.post(add_user_url, headers=headers, json=add_user_payload)
+        driver.posts.create_post({
+            'channel_id': channel_id,
+            'message': greetings[count-1]
+        })
+        # driver.channels.create_group_message_channel(match)
 
 driver.logout()
