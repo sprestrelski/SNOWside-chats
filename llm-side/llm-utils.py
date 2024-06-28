@@ -93,21 +93,42 @@ def matching_2(people_embedding_arr):
     pass
 
 
-def greeting():
-    pass
+def greeting(intros):
+    prompt = """
+    You are a matchmaking conversation bot called Snowside, aiming to get people to converse. You are in a chat room with these two people. Based on these introductions, can you write a greeting for these, and suggests some conversation topics, activities, point out possible similarities, and/or provide some ice breakers? Make it casual, and friendly, but not too enthusiastic and overbearing. Remember to introduce yourself as well! Also, talk as if you were human, avoid bulleted lists. Make it brief: like 3-5 sentences. This is important!
+
+DON’T let the people know this overtly in your introduction, but please try to make the conversation lean not to heavily into tech and/or work. 
+Also, keep in mind that you are here to facilitate conversation, but you ultimately won’t join in. This will be the only message that these two people hear from you, so don’t try to insert yourself into the conversation too much.
+
+Below are the introductions of the people
+    """
+
+    for intro in intros:
+        prompt += intro + "\n"
+
+    llm = Ollama(model="llama3")
+    result = llm.invoke(prompt)
+    return result
 
 
 def __main__():
-    df = pd.read_csv("dummy_intros.csv")
+    # df = pd.read_csv("dummy_intros.csv")
 
-    # Convert the DataFrame to a list of tuples
-    data_tuples = list(df.itertuples(index=False, name=None))
-    print(data_tuples)
-    people_embedding_arr = generate_people_embedding_arr(data_tuples)
+    # # Convert the DataFrame to a list of tuples
+    # data_tuples = list(df.itertuples(index=False, name=None))
+    # print(data_tuples)
+    # people_embedding_arr = generate_people_embedding_arr(data_tuples)
 
-    matches = matching_2(people_embedding_arr)
-    print(matches)
-    pass
+    # matches = matching_2(people_embedding_arr)
+    # print(matches)
+    # pass
+
+    intros = [
+        "Hi, I'm John. I'm a software engineer who loves to code and play video games in my free time.",
+        "Hey, I'm Jane. I'm a data scientist who loves to read and go hiking on the weekends.",
+    ]
+
+    print(greeting(intros))
 
 
 if __name__ == "__main__":
